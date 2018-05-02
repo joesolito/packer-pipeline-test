@@ -33,7 +33,7 @@ pipeline {
         stage ('Packer Validate') {
             steps {
                 dir ('packer') {
-                    sh "packerhc validate -var 'ami_id=${AMI}' -var 'vpc_id=${VPCID}' -var 'subnet_id=${SUBNETID}' httpd.json"
+                    sh "packerhc validate -var 'ami_id=${AMI}' -var 'vpc_id=${VPCID}' -var 'subnet_id=${SUBNETID}' -var 'ami_number=${BUILD_NUMBER}' httpd.json"
                 }
             }
         }
@@ -41,7 +41,7 @@ pipeline {
         stage("Packer Build") {
             steps {
                 dir ('packer') {
-                    sh "packerhc build -var 'ami_id=${AMI}' -var 'vpc_id=${VPCID}' -var 'subnet_id=${SUBNETID}' httpd.json"
+                    sh "packerhc build -var 'ami_id=${AMI}' -var 'vpc_id=${VPCID}' -var 'subnet_id=${SUBNETID}' -var 'ami_number=${BUILD_NUMBER}' httpd.json"
                 }
             }
         }

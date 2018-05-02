@@ -3,7 +3,8 @@
       "ami_id": "",
       "app_name": "httpd",
       "vpc_id": "",
-      "subnet_id": ""
+      "subnet_id": "",
+      "ami_number": ""
     },
  
     "builders": [{
@@ -16,7 +17,7 @@
       "associate_public_ip_address": "true",
       "ami_virtualization_type": "hvm",
       "subnet_id": "{{user `subnet_id`}}",
-      "ami_name": "PACKER-DEMO-{{user `app_name` }}",
+      "ami_name": "PACKER-DEMO-{{user `app_name` }}-{{user `ami_number` }}",
       "tags": {
           "Name": "PACKER-DEMO-{{user `app_name` }}",
           "Env": "DEMO"

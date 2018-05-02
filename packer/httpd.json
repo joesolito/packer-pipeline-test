@@ -1,8 +1,9 @@
 {
     "variables": {
-      "ami_id": "ami-976152f2",
+      "ami_id": "",
       "app_name": "httpd",
-      "vpc_id": "vpc-d35324bb"
+      "vpc_id": "",
+      "subnet_id": ""
     },
  
     "builders": [{
@@ -14,7 +15,7 @@
       "ssh_username": "ec2-user",
       "associate_public_ip_address": "true",
       "ami_virtualization_type": "hvm",
-      "subnet_id": "subnet-77c2a01f",
+      "subnet_id": "{{user `subnet_id`}}",
       "ami_name": "PACKER-DEMO-{{user `app_name` }}",
       "tags": {
           "Name": "PACKER-DEMO-{{user `app_name` }}",
@@ -26,7 +27,7 @@
     "provisioners": [
       {
         "type": "shell",
-        "script": "script-httpd.sh"
+        "script": "scripts/httpd.sh"
       }
     ]
  

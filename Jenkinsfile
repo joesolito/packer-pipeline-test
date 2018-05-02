@@ -1,35 +1,46 @@
 #!groovy
+pipeline {
 
-node {
+    agent any
 
-  def err = null
-  currentBuild.result = "SUCCESS"
+// parameters {
+//         choice(name: 'IS_NEW_STACK', choices: 'qa\nprod', description: 'Specify whether new stack or updating existing')
+//         string(name: 'ENVIRONMENT', defaultValue: '', description: 'Specify an environment to build in, i.e. test, qa02, etc.')
+//         string(name: 'CHANGESET_NAME', defaultValue: 'defaultChangeSet', description: 'Specify an Change Set name ONLY if updating existing stack')
+//         string(name: 'NEW_STACK_NAME', defaultValue: 'NewStackNameHere', description: 'Specify new stack name ONLY if creating new stack')
+//         choice(name: 'REGION', choices: 'us-east-1\nus-west-2', description: 'Specify AWS Region' )
+//         string(name: 'RESOURCE_TYPE', defaultValue: 'ec2', description: 'Enter the folder that mathces the resource type, i.e. ec2, dns, iam, lambda, etc.' )
 
-  try {
-    stage 'Checkout'
-      checkout scm
+//     }
 
-    stage 'Validate'
-      def packer_file = 'packer.json'
-      print "Running packer validate on : ${packer_file}"
-      sh "packer -v ; packer validate ${packer_file}"
-
-    stage 'Build'
-      sh "packer build ${packer_file}"
-
-    stage 'Test'
-      print "Testing goes here."
-  }
-
-  catch (caughtError) {
-    err = caughtError
-    currentBuild.result = "FAILURE"
-  }
-
-  finally {
-    /* Must re-throw exception to propagate error */
-    if (err) {
-      throw err
+    environment {
+        GIT_REPO            = "git@github.com:joesolito/packer-pipeline-test.git"
+        GIT_CREDENTIALS     = "922da2cd-5ab8-4672-8d0a-a176e17d75b6"
     }
-  }
+
+    stages {
+
+        stage("Initialization") {
+            steps {
+                // Checkout Branch
+                git branch: "master", changelog: false, credentialsId: "${GIT_CREDENTIALS}", poll: false, url: "${GIT_REPO}"
+            }
+        }
+
+        stage ('Packer Validate') {
+            steps {
+                dir ('packer') {
+                    sh "packerhc validate httpd.json"
+                }
+            }
+        }
+
+        stage("Packer Build") {
+            steps {
+                dir ('packer') {
+                    sh "packerhc build httpd.json"
+                }
+            }
+        }
+    }
 }

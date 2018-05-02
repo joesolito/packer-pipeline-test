@@ -1,0 +1,33 @@
+{
+    "variables": {
+      "ami_id": "ami-976152f2",
+      "app_name": "httpd",
+      "vpc_id": "vpc-d35324bb"
+    },
+ 
+    "builders": [{
+      "type": "amazon-ebs",
+      "region": "us-east-2",
+      "vpc_id": "{{user `vpc_id`}}",
+      "source_ami": "{{user `ami_id`}}",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "associate_public_ip_address": "true",
+      "ami_virtualization_type": "hvm",
+      "subnet_id": "subnet-77c2a01f",
+      "ami_name": "PACKER-DEMO-{{user `app_name` }}",
+      "tags": {
+          "Name": "PACKER-DEMO-{{user `app_name` }}",
+          "Env": "DEMO"
+ 
+        }
+    }],
+ 
+    "provisioners": [
+      {
+        "type": "shell",
+        "script": "script-httpd.sh"
+      }
+    ]
+ 
+  }

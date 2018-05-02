@@ -16,6 +16,9 @@ pipeline {
     environment {
         GIT_REPO            = "git@github.com:joesolito/packer-pipeline-test.git"
         GIT_CREDENTIALS     = "922da2cd-5ab8-4672-8d0a-a176e17d75b6"
+        AMI                 = "ami-976152f2"
+        VPCID               = "vpc-d35324bb"
+        SUBNETID            = "subnet-77c2a01f"
     }
 
     stages {
@@ -30,7 +33,7 @@ pipeline {
         stage ('Packer Validate') {
             steps {
                 dir ('packer') {
-                    sh "packerhc validate httpd.json"
+                    sh "packerhc validate -var 'ami_id=${AMI}' -var 'vpc_id=${VPCID}' -var 'subnet_id=${SUBNETID}' httpd.json"
                 }
             }
         }
@@ -38,7 +41,7 @@ pipeline {
         stage("Packer Build") {
             steps {
                 dir ('packer') {
-                    sh "packerhc build httpd.json"
+                    sh "packerhc build -var 'ami_id=${AMI}' -var 'vpc_id=${VPCID}' -var 'subnet_id=${SUBNETID}' httpd.json"
                 }
             }
         }

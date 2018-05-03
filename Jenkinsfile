@@ -17,8 +17,8 @@ pipeline {
         GIT_REPO            = "git@github.com:joesolito/packer-pipeline-test.git"
         GIT_CREDENTIALS     = "49e1fd57-8160-4692-bcd0-e0fc5d73ca90"
         AMI                 = "ami-976152f2"
-        VPCID               = "vpc-d35324bb"
-        SUBNETID            = "subnet-77c2a01f"
+        VPCID               = "vpc-78c7b110"
+        SUBNETID            = "subnet-6ca50016"
     }
 
     stages {
